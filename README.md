@@ -1,4 +1,4 @@
-## Created with support of Claude
+## Created by Pedro Cruz with support of Claude
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
