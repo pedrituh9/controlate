@@ -1,4 +1,4 @@
-export type AccountType = 'checking' | 'savings' | 'credit_card' | 'other'
+export type AccountType = 'checking' | 'savings' | 'credit_card' | 'cash' | 'other'
 export type TransactionType = 'income' | 'expense'
 export type CategoryType = 'income' | 'expense'
 
@@ -8,6 +8,7 @@ export interface Account {
   name: string
   type: AccountType
   color: string
+  balance: number
   created_at: string
 }
 
@@ -31,6 +32,7 @@ export interface Transaction {
   description: string
   date: string
   created_at: string
+  transfer_id?: string | null
   // joined
   account?: Account
   category?: Category

@@ -17,8 +17,9 @@ const ACCOUNT_COLORS = [
 
 const schema = z.object({
   name: z.string().min(1, 'Nome obrigatório'),
-  type: z.enum(['checking', 'savings', 'credit_card', 'other']),
+  type: z.enum(['checking', 'savings', 'credit_card', 'cash', 'other']),
   color: z.string(),
+  balance: z.string().refine((v) => !isNaN(Number(v.replace(',', '.'))), 'Valor inválido'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -27,6 +28,7 @@ const typeLabels = {
   checking: 'Conta à ordem',
   savings: 'Poupança',
   credit_card: 'Cartão de crédito',
+  cash: 'Dinheiro',
   other: 'Outro',
 }
 
@@ -40,7 +42,7 @@ export function AccountForm({ onSuccess }: AccountFormProps) {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', type: 'checking', color: ACCOUNT_COLORS[0] },
+    defaultValues: { name: '', type: 'checking', color: ACCOUNT_COLORS[0], balance: '0' },
   })
 
   async function onSubmit(values: FormValues) {
@@ -52,6 +54,7 @@ export function AccountForm({ onSuccess }: AccountFormProps) {
       name: values.name,
       type: values.type,
       color: values.color,
+      balance: Number(values.balance.replace(',', '.')),
     })
 
     if (!error) {
@@ -122,6 +125,19 @@ export function AccountForm({ onSuccess }: AccountFormProps) {
                   ))}
                 </div>
               </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="balance"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Saldo inicial (€)</FormLabel>
+              <FormControl>
+                <Input placeholder="0,00" {...field} />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

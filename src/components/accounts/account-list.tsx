@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Trash2, Plus } from 'lucide-react'
 import type { Account } from '@/types'
 import { createClient } from '@/lib/supabase'
+import { formatCurrency } from '@/lib/formatters'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,6 +16,7 @@ const typeLabels: Record<string, string> = {
   checking: 'Conta à ordem',
   savings: 'Poupança',
   credit_card: 'Cartão de crédito',
+  cash: 'Dinheiro',
   other: 'Outro',
 }
 
@@ -72,6 +74,9 @@ export function AccountList({ accounts }: AccountListProps) {
                   <Badge variant="secondary" className="text-xs mt-0.5">
                     {typeLabels[account.type] ?? account.type}
                   </Badge>
+                  <p className={`text-sm font-semibold mt-1 ${account.balance < 0 ? 'text-destructive' : 'text-green-600'}`}>
+                    {formatCurrency(account.balance)}
+                  </p>
                 </div>
                 <Button
                   variant="ghost"
